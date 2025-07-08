@@ -162,7 +162,7 @@ export default function AngryMeme() {
   const [panOffsetStart, setPanOffsetStart] = useState<{x: number, y: number} | null>(null);
 
   // Add eraser tool state
-  const [eraserSize, setEraserSize] = useState(24);
+  const [eraserSize] = useState(24);
 
   const fontFamilies = ["Arial", "Anton", "Impact", "Comic Sans MS", "Times New Roman", "Helvetica"]
 
@@ -224,25 +224,6 @@ export default function AngryMeme() {
       x: cx + dx * cos - dy * sin,
       y: cy + dx * sin + dy * cos,
     }
-  }
-
-  // Helper function to check if point is inside rotated rectangle
-  const isPointInRotatedRect = (
-    px: number,
-    py: number,
-    rx: number,
-    ry: number,
-    rw: number,
-    rh: number,
-    rotation: number,
-  ) => {
-    // Rotate the point in the opposite direction
-    const centerX = rx + rw / 2
-    const centerY = ry + rh / 2
-    const rotated = rotatePoint(px, py, centerX, centerY, -rotation)
-
-    // Check if the rotated point is inside the unrotated rectangle
-    return rotated.x >= rx && rotated.x <= rx + rw && rotated.y >= ry && rotated.y <= ry + rh
   }
 
   // Save state to history - Fixed function
@@ -400,7 +381,7 @@ export default function AngryMeme() {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [undo, redo, selectedMeme, selectedFloatingText, copiedElement])
+  }, [copySelected, deleteSelected, pasteFromClipboard])
 
   const copySelected = () => {
     if (selectedFloatingText) {
@@ -1308,7 +1289,7 @@ export default function AngryMeme() {
   }, [redrawCanvas])
 
   const selectedMemeData = memeInstances.find((m) => m.id === selectedMeme)
-  const selectedTextBoxData = selectedMemeData?.textBoxes.find((tb) => tb.id === selectedMemeData.selectedTextBox) || null
+  // const selectedTextBoxData = selectedMemeData?.textBoxes.find((tb) => tb.id === selectedMemeData.selectedTextBox) || null
 
   // --- Eraser Tool Logic ---
   function isPointNearStroke(point: {x: number, y: number}, stroke: DrawStroke, threshold: number) {
