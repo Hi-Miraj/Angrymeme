@@ -270,23 +270,26 @@ export default function AngryMeme() {
       const prevState = JSON.parse(history[newIndex])
 
       // Restore memes with proper image objects
-      if (prevState.memeInstances) {
-        const restoredMemes = prevState.memeInstances.map((meme: any) => {
-          const img = new Image()
-          img.src = meme.image
-          return {
-            ...meme,
-            image: img,
-            isDragging: false,
-            isResizing: false,
-            resizeHandle: null,
-            selectedTextBox: null,
-          }
-        })
-        setMemeInstances(restoredMemes)
-      } else {
-        setMemeInstances([])
-      }
+      const restoredMemes = prevState.memeInstances.map((meme: unknown) => {
+        const m = meme as MemeInstance & { image: string };
+        const img = new Image();
+        img.src = m.image;
+        return {
+          id: m.id,
+          x: m.x,
+          y: m.y,
+          width: m.width,
+          height: m.height,
+          image: img,
+          textBoxes: m.textBoxes,
+          drawStrokes: m.drawStrokes,
+          selectedTextBox: m.selectedTextBox,
+          isDragging: false,
+          isResizing: false,
+          resizeHandle: null,
+        };
+      });
+      setMemeInstances(restoredMemes);
 
       setFloatingTexts(
         prevState.floatingTexts?.map((ft: FloatingText) => ({
@@ -312,23 +315,26 @@ export default function AngryMeme() {
       const nextState = JSON.parse(history[newIndex])
 
       // Restore memes with proper image objects
-      if (nextState.memeInstances) {
-        const restoredMemes = nextState.memeInstances.map((meme: any) => {
-          const img = new Image()
-          img.src = meme.image
-          return {
-            ...meme,
-            image: img,
-            isDragging: false,
-            isResizing: false,
-            resizeHandle: null,
-            selectedTextBox: null,
-          }
-        })
-        setMemeInstances(restoredMemes)
-      } else {
-        setMemeInstances([])
-      }
+      const restoredMemes = nextState.memeInstances.map((meme: unknown) => {
+        const m = meme as MemeInstance & { image: string };
+        const img = new Image();
+        img.src = m.image;
+        return {
+          id: m.id,
+          x: m.x,
+          y: m.y,
+          width: m.width,
+          height: m.height,
+          image: img,
+          textBoxes: m.textBoxes,
+          drawStrokes: m.drawStrokes,
+          selectedTextBox: m.selectedTextBox,
+          isDragging: false,
+          isResizing: false,
+          resizeHandle: null,
+        };
+      });
+      setMemeInstances(restoredMemes);
 
       setFloatingTexts(
         nextState.floatingTexts?.map((ft: FloatingText) => ({
